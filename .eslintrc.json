@@ -1,0 +1,18 @@
+{
+    "root": true,
+    "ignorePatterns": ["src/components/ui/*"],
+    "extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended", "plugin:react/recommended", "plugin:json/recommended"],
+    "plugins": ["only-error", "prettier", "unused-imports"],
+    "rules": {
+        "prettier/prettier": [
+            "error",
+            { "extends": [".prettierrc"] }
+        ],
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+            "error",
+            { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+        ],
+        "@typescript-eslint/no-unused-vars": "off"
+    }
+  }

@@ -1,0 +1,46 @@
+{
+  "name": "surrealdb.react",
+  "version": "0.0.1",
+  "description": "React.js driver for SurrealDB",
+  "license": "Apache 2.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surrealdb/surrealdb.js.git"
+  },
+  "author": {
+    "name": "Tobie Morgan Hitchcock",
+    "url": "https://surrealdb.com"
+  },
+  "keywords": ["SurrealDB", "React", "Typescript"],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "ts": "tsc --watch"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.4.3",
+    "@types/react": "^18.2.33",
+    "react": "^18.2.0",
+    "surrealdb.js": "^0.11.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "@vitejs/plugin-react": "^4.1.0",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-only-error": "^1.0.2",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-organize-imports": "^3.2.3",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  }
+}
