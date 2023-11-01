@@ -12,7 +12,11 @@
     "name": "Tobie Morgan Hitchcock",
     "url": "https://surrealdb.com"
   },
-  "keywords": ["SurrealDB", "React", "Typescript"],
+  "keywords": [
+    "SurrealDB",
+    "React",
+    "Typescript"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -21,7 +25,6 @@
     "ts": "tsc --watch"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.4.3",
     "@types/react": "^18.2.33",
     "react": "^18.2.0",
     "surrealdb.js": "^0.11.0"
