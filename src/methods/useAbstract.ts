@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext, useEffect, useRef, useSyncExternalStore } from 'react';
-import { CacheCollection, CacheValue, createEmptyCacheValue } from '../cache';
+import { CacheCollection, CacheValue, emptyCacheValue } from '../cache';
 import { SurrealClient } from '../client';
 import { NoProviderError } from '../errors';
 import { ParametersExceptFirst } from '../library/ParametersExceptFirst';
@@ -64,27 +64,28 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
         }
     }
 
-    const state = JSON.parse(
-        useSyncExternalStore(
-            (l) => {
-                function listener(
-                    _: string,
-                    value: CacheValue<Data, Error>,
-                    prev?: CacheValue<Data, Error>
-                ) {
-                    updateRefetchInterval(value, prev);
-                    l();
-                }
+    const state = useSyncExternalStore(
+        (l) => {
+            function listener(
+                _: string,
+                value: CacheValue<Data, Error>,
+                prev?: CacheValue<Data, Error>
+            ) {
+                console.log(1);
+                updateRefetchInterval(value, prev);
+                l();
+            }
 
-                cache.subscribe(listener, collection, key);
-                return () => cache.unsubscribe(listener, collection, key);
-            },
-            () =>
-                JSON.stringify(
-                    cache.get(collection, key) ?? createEmptyCacheValue()
-                ),
-            () => JSON.stringify(createEmptyCacheValue())
-        )
+            cache.subscribe(listener, collection, key);
+            return () => cache.unsubscribe(listener, collection, key);
+        },
+        () => {
+            const v = cache.get(collection, key);
+            const f = emptyCacheValue;
+            console.log({ v, f });
+            return v ?? f;
+        },
+        () => emptyCacheValue
     ) as CacheValue<Data, Error>;
 
     useEffect(() => {

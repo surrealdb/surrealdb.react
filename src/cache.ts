@@ -39,12 +39,12 @@ export abstract class AbstractCache {
     ): boolean;
 }
 
-export function createEmptyCacheValue() {
-    return {
-        status: 'pending',
-        fetchStatus: 'idle',
-    } satisfies CacheValue;
-}
+export const emptyCacheValue = {
+    status: 'pending',
+    fetchStatus: 'idle',
+} satisfies CacheValue;
+
+Object.freeze(emptyCacheValue);
 
 export function updateCache<Data = unknown, Error = unknown>(
     cache: AbstractCache,
@@ -166,7 +166,7 @@ export class MemoryCache extends AbstractCache {
 
     createEmptyCacheValue(collection: CacheCollection, key: string) {
         if (!this.get(collection, key)) {
-            return this.set(collection, key, createEmptyCacheValue());
+            return this.set(collection, key, emptyCacheValue);
         }
 
         return false;
