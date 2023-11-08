@@ -40,8 +40,10 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
             ? params.refetchInterval
             : undefined;
     const enabled =
-        collection == 'query' && 'enabled' in params
-            ? params.enabled
+        collection == 'query'
+            ? 'enabled' in params && typeof params.enabled == 'boolean'
+                ? params.enabled
+                : true
             : undefined;
 
     function updateRefetchInterval(
@@ -71,7 +73,6 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
                 value: CacheValue<Data, Error>,
                 prev?: CacheValue<Data, Error>
             ) {
-                console.log(1);
                 updateRefetchInterval(value, prev);
                 l();
             }
@@ -82,7 +83,6 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
         () => {
             const v = cache.get(collection, key);
             const f = emptyCacheValue;
-            console.log({ v, f });
             return v ?? f;
         },
         () => emptyCacheValue
