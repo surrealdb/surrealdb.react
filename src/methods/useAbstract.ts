@@ -1,6 +1,12 @@
 'use client';
 
-import { useContext, useEffect, useRef, useSyncExternalStore } from 'react';
+import {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useSyncExternalStore,
+} from 'react';
 import { CacheCollection, CacheValue, emptyCacheValue } from '../cache';
 import { SurrealClient } from '../client';
 import { NoProviderError } from '../errors';
@@ -8,9 +14,14 @@ import { ParametersExceptFirst } from '../library/ParametersExceptFirst';
 import useOnUnmount from '../library/useOnUnmount';
 import { SurrealContext } from '../provider';
 
+export type AbstractParameters =
+    | AbstractQueryParameters
+    | AbstractMutationParameters;
+
 export type AbstractQueryParameters = {
     client?: SurrealClient;
     refetchInterval?: number;
+    refetchOnWindowFocus?: boolean;
     enabled?: boolean;
 };
 
@@ -22,49 +33,29 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
     collection: CacheCollection,
     key: string,
     fetcher: (client: SurrealClient, ...args: T) => Promise<Data>,
-    { client, ...params }: AbstractQueryParameters | AbstractMutationParameters
+    params: AbstractParameters
 ) {
-    const refetchIntervalRef = useRef<number>();
-    const initialised = useRef(false);
-
-    const contextClient = useContext(SurrealContext);
-    client = client || contextClient;
-    if (!client) throw new NoProviderError();
+    const client = useQueryClient(params);
     const { cache } = client;
 
-    const wrappedFetcher = async (
-        ...args: ParametersExceptFirst<typeof fetcher>
-    ) => await fetcher(client!, ...args);
-    const refetchInterval =
-        collection == 'query' && 'refetchInterval' in params
-            ? params.refetchInterval
-            : undefined;
-    const enabled =
-        collection == 'query'
-            ? 'enabled' in params && typeof params.enabled == 'boolean'
-                ? params.enabled
-                : true
-            : undefined;
+    const refetch = async (...args: ParametersExceptFirst<typeof fetcher>) =>
+        await fetcher(client, ...args);
 
-    function updateRefetchInterval(
-        v: CacheValue<Data, Error>,
-        prev?: CacheValue<Data, Error>
-    ) {
-        if (!refetchInterval) return;
-        if (
-            !prev ||
-            !v.responseUpdatedAt ||
-            !prev.responseUpdatedAt ||
-            v.responseUpdatedAt > prev.responseUpdatedAt
-        ) {
-            if (refetchIntervalRef.current)
-                clearTimeout(refetchIntervalRef.current);
-            refetchIntervalRef.current = setTimeout(
-                wrappedFetcher,
-                refetchInterval
-            );
-        }
-    }
+    const initialFetch = useInitialFetch<T, Data>(
+        collection,
+        params,
+        refetch,
+        client,
+        key
+    );
+
+    const updateRefetchInterval = useRefetchInterval<T, Data, Error>(
+        collection,
+        params,
+        refetch
+    );
+
+    useRefetchOnWindowFocus<T, Data>(collection, params, refetch);
 
     const state = useSyncExternalStore(
         (l) => {
@@ -90,6 +81,98 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
 
     useEffect(() => {
         cache.createEmptyCacheValue(collection, key);
+        initialFetch();
+    }, []);
+
+    useOnUnmount(() => {
+        cache.invalidate(collection, key);
+    }, [cache]);
+
+    return {
+        ...state,
+        refetch,
+    };
+}
+
+// Hooks used by useAbstract
+
+export function useQueryClient(params: AbstractParameters) {
+    const contextClient = useContext(SurrealContext);
+    const client = params.client || contextClient;
+    if (!client) throw new NoProviderError();
+    return client;
+}
+
+export function useRefetchInterval<T extends unknown[], Data, Error = unknown>(
+    collection: CacheCollection,
+    params: AbstractParameters,
+    refetch: (...args: T) => Promise<Data>
+) {
+    const refetchIntervalRef = useRef<number>();
+    const refetchInterval =
+        collection == 'query' && 'refetchInterval' in params
+            ? params.refetchInterval
+            : undefined;
+
+    return function (
+        v: CacheValue<Data, Error>,
+        prev?: CacheValue<Data, Error>
+    ) {
+        if (!refetchInterval) return;
+        if (
+            !prev ||
+            !v.responseUpdatedAt ||
+            !prev.responseUpdatedAt ||
+            v.responseUpdatedAt > prev.responseUpdatedAt
+        ) {
+            if (refetchIntervalRef.current)
+                clearTimeout(refetchIntervalRef.current);
+            refetchIntervalRef.current = setTimeout(refetch, refetchInterval);
+        }
+    };
+}
+
+export function useRefetchOnWindowFocus<T extends unknown[], Data>(
+    collection: CacheCollection,
+    params: AbstractParameters,
+    refetch: (...args: T) => Promise<Data>
+) {
+    const refetchOnWindowFocus =
+        collection == 'query'
+            ? 'refetchOnWindowFocus' in params &&
+              typeof params.refetchOnWindowFocus == 'boolean'
+                ? params.refetchOnWindowFocus
+                : true
+            : false;
+
+    useEffect(() => {
+        function listener() {
+            if (refetchOnWindowFocus) {
+                refetch(...([] as unknown as T));
+            }
+        }
+
+        window.addEventListener('focus', listener);
+        return () => window.removeEventListener('focus', listener);
+    });
+}
+
+export function useInitialFetch<T extends unknown[], Data>(
+    collection: CacheCollection,
+    params: AbstractMutationParameters,
+    fetcher: (...args: T) => Promise<Data>,
+    { cache }: SurrealClient,
+    key: string
+) {
+    const initialised = useRef(false);
+    const enabled =
+        collection == 'query'
+            ? 'enabled' in params && typeof params.enabled == 'boolean'
+                ? params.enabled
+                : true
+            : false;
+
+    return useCallback(() => {
         if (!initialised.current) {
             initialised.current = true;
             const current = cache.get(collection, key);
@@ -99,22 +182,13 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
                 current?.status == 'pending' &&
                 current?.fetchStatus == 'idle'
             ) {
-                wrappedFetcher(
-                    ...([] as unknown as ParametersExceptFirst<typeof fetcher>)
-                );
+                fetcher(...([] as unknown as Parameters<typeof fetcher>));
             }
         }
-    }, [enabled]);
-
-    useOnUnmount(() => {
-        cache.invalidate(collection, key);
-    }, [cache]);
-
-    return {
-        ...state,
-        refetch: wrappedFetcher,
-    };
+    }, []);
 }
+
+// Abstract implementations
 
 export function useAbstractQuery<T extends unknown[], Data, Error = unknown>(
     key: string,
