@@ -16,8 +16,6 @@ export function fetcherFactory<
         ...args: ParametersExceptFirst<typeof fetcher>
     ) {
         const { cache } = client;
-        if (cache.get(collection, key)?.fetchStatus == 'fetching')
-            throw new Error('Already fetching');
         updateCache(cache, collection, key, { fetchStatus: 'fetching' });
 
         return await fetcher(client, ...args)
