@@ -5,6 +5,7 @@
       "lib": ["ES2020", "DOM", "DOM.Iterable"],
       "module": "nodenext",
       "skipLibCheck": true,
+      "esModuleInterop": true,
   
       /* Bundler mode */
       "moduleResolution": "nodenext",
