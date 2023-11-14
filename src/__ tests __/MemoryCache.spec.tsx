@@ -66,6 +66,16 @@ describe('MemoryCache', () => {
 
         expect(added).toBe(true);
     });
+    test('invalidating a cache item should not remove any listeners', () => {
+        const listener = jest.fn();
+        cache.set(testCollection, testKey, testValue);
+        cache.subscribe(listener, testCollection, testKey);
+        cache.invalidate(testCollection, testKey);
+        cache.set(testCollection, testKey, testValue);
+
+        expect(listener).toHaveBeenCalledTimes(1);
+        expect(listener).toHaveBeenCalledWith(testKey, testValue, undefined);
+    });
     test('should return false when removing a non-existent listener', () => {
         const nonExistentListener = jest.fn();
         const removed = cache.unsubscribe(

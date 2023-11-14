@@ -108,7 +108,6 @@ export class MemoryCache extends AbstractCache {
     }
 
     invalidate(collection: CacheCollection, key: string) {
-        delete this.listenersByKey[collection][key];
         return delete this.collections[collection][key];
     }
 
