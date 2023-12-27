@@ -34,7 +34,6 @@ describe('useAbstract', () => {
   it('initializes correctly with mutation collection', () => {
     const fetcher = jest.fn();
     const params: AbstractQueryParameters = { enabled: true };
-    // const params = { client: mockClient };
 
     const { result } = renderHook(() => useAbstract('mutation', 'key', fetcher, params), { wrapper });
 
