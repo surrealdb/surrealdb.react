@@ -1,9 +1,11 @@
 'use client';
 
-import { AnyAuth } from 'surrealdb.js/types';
+import { type Surreal } from 'surrealdb.js';
 import { fetcherFactory } from '../library/fetcherFactory';
 import { AbstractMutationParameters, useAbstractMutation } from './useAbstract';
 import { useAuthUpdated } from './useAuthUpdated';
+
+type AnyAuth = Parameters<Surreal['signin']>[0];
 
 export function useSignin<Error = unknown>(
     abstractArguments: AbstractMutationParameters = {}

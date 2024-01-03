@@ -1,6 +1,5 @@
 'use client';
 
-import { Token } from 'surrealdb.js/types';
 import { fetcherFactory } from '../library/fetcherFactory';
 import { AbstractMutationParameters, useAbstractMutation } from './useAbstract';
 import { useAuthUpdated } from './useAuthUpdated';
@@ -10,7 +9,7 @@ export function useAuthenticate<Error = unknown>(
 ) {
     const authUpdated = useAuthUpdated();
 
-    type Args = [token: Token];
+    type Args = [token: string];
     const key = JSON.stringify(['__auth', 'authenticate']);
     const fetcher = fetcherFactory<Args, boolean, Error>(
         'mutation',

@@ -1,9 +1,11 @@
 'use client';
 
-import { ScopeAuth } from 'surrealdb.js/types';
+import { type Surreal } from 'surrealdb.js';
 import { fetcherFactory } from '../library/fetcherFactory';
 import { AbstractMutationParameters, useAbstractMutation } from './useAbstract';
 import { useAuthUpdated } from './useAuthUpdated';
+
+type ScopeAuth = Parameters<Surreal['signup']>[0];
 
 export function useSignup<Error = unknown>(
     abstractArguments: AbstractMutationParameters = {}
