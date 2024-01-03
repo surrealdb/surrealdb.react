@@ -3,7 +3,6 @@ import { Surreal } from 'surrealdb.js';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useAuthenticate } from '../../methods/useAuthenticate';
 import { SurrealClient } from '../../client';
-import { Token } from 'surrealdb.js/types';
 import { MemoryCache } from '../../cache';
 
 jest.mock('../client');
@@ -17,12 +16,6 @@ const mockClient = new SurrealClient({
   cache: new MemoryCache(),
   surreal: new Surreal(),
 });
-
-// const mockClient = {
-//   surreal: {
-//       authenticate: authenticateMock
-//   }
-// };
 
 const SurrealContext = React.createContext<SurrealClient>(mockClient);
 
@@ -38,7 +31,7 @@ describe('useAuthenticate', () => {
 
   it('should call surreal.authenticate with the provided token', async () => {
     authenticateMock.mockResolvedValue(true);
-    const token: Token = 'auth-token';
+    const token: string = 'auth-token';
     const { result } = renderHook(() => useAuthenticate(), { wrapper });
 
     await act(async () => {
@@ -53,7 +46,7 @@ describe('useAuthenticate', () => {
   it('should handle authentication errors', async () => {
     authenticateMock.mockRejectedValue(new Error('Auth failed'));
 
-    const token: Token = 'invalid-token';
+    const token: string = 'invalid-token';
     const { result } = renderHook(() => useAuthenticate(), { wrapper });
 
     await act(async () => {

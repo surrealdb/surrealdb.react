@@ -1,5 +1,4 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-
 import { useAuthUpdated } from '../../methods/useAuthUpdated';
 import { useInfo } from '../../methods/useInfo';
 
