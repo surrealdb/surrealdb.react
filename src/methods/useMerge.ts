@@ -1,7 +1,10 @@
 'use client';
 
-import { fetcherFactory } from '../library/fetcherFactory';
-import { AbstractMutationParameters, useAbstractMutation } from './useAbstract';
+import { fetcherFactory } from '@/library/fetcherFactory';
+import {
+    AbstractMutationParameters,
+    useAbstractMutation,
+} from '@/methods/useAbstract';
 
 export function useMerge<
     Data extends Record<string, unknown>,

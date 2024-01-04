@@ -1,10 +1,10 @@
-import { renderHook, act } from '@testing-library/react-hooks';
-import { useDelete } from '../../methods/useDelete';
-import { fetcherFactory } from '../../library/fetcherFactory';
-import { useAbstractMutation } from '../../methods/useAbstract';
+import { fetcherFactory } from '@/library/fetcherFactory';
+import { useAbstractMutation } from '@/methods/useAbstract';
+import { useDelete } from '@/methods/useDelete';
+import { act, renderHook } from '@testing-library/react';
 
-jest.mock('../../library/fetcherFactory');
-jest.mock('../../methods/useAbstract');
+jest.mock('@/library/fetcherFactory');
+jest.mock('@/methods/useAbstract');
 
 describe('useDelete', () => {
     const mockResource = 'testResource';
@@ -13,7 +13,9 @@ describe('useDelete', () => {
     it('should use fetcherFactory and useAbstractMutation with correct parameters', () => {
         const mockMutationResult = { mutate: jest.fn() };
         (useAbstractMutation as jest.Mock).mockReturnValue(mockMutationResult);
-        (fetcherFactory as jest.Mock).mockImplementation((_, _key, fetcher) => fetcher);
+        (fetcherFactory as jest.Mock).mockImplementation(
+            (_, _key, fetcher) => fetcher
+        );
 
         const { result } = renderHook(() =>
             useDelete({
@@ -38,5 +40,4 @@ describe('useDelete', () => {
         );
         expect(mockMutationResult.mutate).toHaveBeenCalled();
     });
-
 });

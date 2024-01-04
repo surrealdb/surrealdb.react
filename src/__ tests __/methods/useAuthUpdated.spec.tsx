@@ -1,15 +1,15 @@
-import { renderHook, act } from '@testing-library/react-hooks';
-import { useAuthUpdated } from '../../methods/useAuthUpdated';
-import { useInfo } from '../../methods/useInfo';
+import { useAuthUpdated } from '@/methods/useAuthUpdated';
+import { useInfo } from '@/methods/useInfo';
+import { act, renderHook } from '@testing-library/react';
 
-jest.mock('../../methods/useInfo');
+jest.mock('@/methods/useInfo');
 
 describe('useAuthUpdated', () => {
     it('should call refetchInfo if isInfoPending is false', () => {
         const refetchInfo = jest.fn();
         (useInfo as jest.Mock).mockReturnValue({
             refetch: refetchInfo,
-            isPending: false
+            isPending: false,
         });
 
         const { result } = renderHook(() => useAuthUpdated());
@@ -25,7 +25,7 @@ describe('useAuthUpdated', () => {
         const refetchInfo = jest.fn();
         (useInfo as jest.Mock).mockReturnValue({
             refetch: refetchInfo,
-            isPending: true
+            isPending: true,
         });
 
         const { result } = renderHook(() => useAuthUpdated());
@@ -36,5 +36,4 @@ describe('useAuthUpdated', () => {
 
         expect(refetchInfo).not.toHaveBeenCalled();
     });
-
 });
