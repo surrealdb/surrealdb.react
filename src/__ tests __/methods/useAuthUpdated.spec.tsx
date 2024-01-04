@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import { useAuthUpdated } from '../../methods/useAuthUpdated';
 import { useInfo } from '../../methods/useInfo';
 
-jest.mock('./useInfo');
+jest.mock('../../methods/useInfo');
 
 describe('useAuthUpdated', () => {
     it('should call refetchInfo if isInfoPending is false', () => {

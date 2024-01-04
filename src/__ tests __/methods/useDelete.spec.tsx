@@ -3,8 +3,8 @@ import { useDelete } from '../../methods/useDelete';
 import { fetcherFactory } from '../../library/fetcherFactory';
 import { useAbstractMutation } from '../../methods/useAbstract';
 
-jest.mock('../library/fetcherFactory');
-jest.mock('./useAbstract');
+jest.mock('../../library/fetcherFactory');
+jest.mock('../../methods/useAbstract');
 
 describe('useDelete', () => {
     const mockResource = 'testResource';

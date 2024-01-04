@@ -5,10 +5,7 @@ import { useAuthenticate } from '../../methods/useAuthenticate';
 import { SurrealClient } from '../../client';
 import { MemoryCache } from '../../cache';
 
-jest.mock('../client');
-jest.mock('./useAbstract');
-jest.mock('./useAuthUpdated');
-jest.mock('../library/fetcherFactory');
+jest.mock('../../client');
 
 const authenticateMock = jest.fn();
 
