@@ -26,8 +26,10 @@
     "test": "jest"
   },
   "engines": {
-    "node":">= v18.17.0",
+
+    "node": ">= 20.5.0",
     "pnpm":">= 8.9.2"
+
   },
   "dependencies": {
     "@types/react": "^18.2.33",
