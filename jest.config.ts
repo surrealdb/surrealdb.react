@@ -5,7 +5,7 @@ export default {
     preset: 'ts-jest',
     testEnvironment: 'jest-environment-jsdom',
     transform: {
-         // Process `*.tsx` files with `ts-jest`, and `*.jsx` with `babel-jest`
+        // Process `*.tsx` files with `ts-jest`, and `*.jsx` with `babel-jest`
         '^.+\\.tsx?$': 'ts-jest',
         '^.+\\.jsx?$': 'babel-jest',
     },
@@ -18,6 +18,5 @@ export default {
         '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/__ mocks __/fileMock.js',
         // Specifically link unws to the commonjs file
         unws: '<rootDir>/node_modules/unws/src/node.js',
-
     },
 };

@@ -20,4 +20,3 @@ export { useSelect } from '@/methods/useSelect';
 export { useSignin } from '@/methods/useSignin';
 export { useSignup } from '@/methods/useSignup';
 export { useUpdate } from '@/methods/useUpdate';
-

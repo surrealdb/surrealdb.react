@@ -2,7 +2,6 @@ import { updateCache } from '@/cache';
 import { CacheCollection, SurrealClient } from '@/index';
 import { ParametersExceptFirst } from '@/library/ParametersExceptFirst';
 
-
 export function fetcherFactory<
     T extends unknown[],
     Data = unknown,

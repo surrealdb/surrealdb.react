@@ -1,7 +1,7 @@
 import { MemoryCache } from '@/cache';
 import { SurrealClient } from '@/client';
-import { useAuthenticate } from '@/methods/useAuthenticate';
 import { useAbstractMutation } from '@/methods/useAbstract';
+import { useAuthenticate } from '@/methods/useAuthenticate';
 import { act, renderHook } from '@testing-library/react';
 import React from 'react';
 import { Surreal } from 'surrealdb.js';
@@ -15,7 +15,7 @@ const authenticateMock = jest.fn();
 
 const mockSurreal = {
     authenticate: authenticateMock,
-} as Partial<Surreal>; 
+} as Partial<Surreal>;
 
 const mockedSurreal = mockSurreal as unknown as Surreal;
 
@@ -42,7 +42,6 @@ describe('useAuthenticate', () => {
     });
 
     it('should call surreal.authenticate with the provided token', async () => {
-
         authenticateMock.mockResolvedValue(true);
 
         const token: string = 'mock-token';
@@ -53,12 +52,10 @@ describe('useAuthenticate', () => {
         });
 
         expect(authenticateMock).toHaveBeenCalledWith(token);
-
     });
 
     // Authentication error tests
     it('should handle authentication errors', async () => {
-
         authenticateMock.mockRejectedValue(new Error('Auth failed'));
 
         const mockToken = 'mock-token';
@@ -69,6 +66,5 @@ describe('useAuthenticate', () => {
         });
 
         expect(result.current.isError).toBeTruthy();
-        
     });
 });

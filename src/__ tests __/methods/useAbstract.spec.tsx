@@ -12,35 +12,39 @@ const mockClient = new SurrealClient({
 });
 
 const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <SurrealContext.Provider value={mockClient}>{children}</SurrealContext.Provider>
+    <SurrealContext.Provider value={mockClient}>
+        {children}
+    </SurrealContext.Provider>
 );
 
 describe('useAbstract', () => {
     beforeEach(() => {
-      jest.clearAllMocks();
+        jest.clearAllMocks();
     });
 
     // Query
     it('initializes correctly with query collection', () => {
-      const fetcher = jest.fn();
-      const params: AbstractQueryParameters = { enabled: true };
+        const fetcher = jest.fn();
+        const params: AbstractQueryParameters = { enabled: true };
 
-      const { result } = renderHook(() => useAbstract('query', 'key', fetcher, params), { wrapper });
+        const { result } = renderHook(
+            () => useAbstract('query', 'key', fetcher, params),
+            { wrapper }
+        );
 
-      expect(result.current).toBeDefined();
+        expect(result.current).toBeDefined();
     });
 
     // Mutation
     it('initializes correctly with mutation collection', () => {
-      const fetcher = jest.fn();
-      const params: AbstractQueryParameters = { enabled: true };
+        const fetcher = jest.fn();
+        const params: AbstractQueryParameters = { enabled: true };
 
-      const { result } = renderHook(() => useAbstract('mutation', 'key', fetcher, params), { wrapper });
+        const { result } = renderHook(
+            () => useAbstract('mutation', 'key', fetcher, params),
+            { wrapper }
+        );
 
-      expect(result.current).toBeDefined();
+        expect(result.current).toBeDefined();
     });
 });
-
-
-
-
