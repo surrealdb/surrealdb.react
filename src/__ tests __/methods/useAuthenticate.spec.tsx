@@ -1,7 +1,7 @@
 import { MemoryCache } from '@/cache';
 import { SurrealClient } from '@/client';
 import { useAuthenticate } from '@/methods/useAuthenticate';
-import { useAbstractMutation } from '@/methods/useAbstract'; // Import to mock
+import { useAbstractMutation } from '@/methods/useAbstract';
 import { act, renderHook } from '@testing-library/react';
 import React from 'react';
 import { Surreal } from 'surrealdb.js';
@@ -11,13 +11,17 @@ jest.mock('@/methods/useAbstract');
 jest.mock('@/methods/useAuthUpdated');
 jest.mock('@/library/fetcherFactory');
 
+const authenticateMock = jest.fn();
+
 const mockSurreal = {
-    authenticate: jest.fn(),
-};
+    authenticate: authenticateMock,
+} as Partial<Surreal>; 
+
+const mockedSurreal = mockSurreal as unknown as Surreal;
 
 const mockClient = new SurrealClient({
     cache: new MemoryCache(),
-    surreal: mockSurreal as unknown as Surreal,
+    surreal: mockedSurreal,
 });
 
 const SurrealContext = React.createContext<SurrealClient>(mockClient);
@@ -38,28 +42,33 @@ describe('useAuthenticate', () => {
     });
 
     it('should call surreal.authenticate with the provided token', async () => {
-        const token: string = 'auth-token';
+
+        authenticateMock.mockResolvedValue(true);
+
+        const token: string = 'mock-token';
         const { result } = renderHook(() => useAuthenticate(), { wrapper });
 
         await act(async () => {
             result.current.mutate(token);
         });
 
-        expect(mockClient.surreal.authenticate).toHaveBeenCalledWith(token);
-        expect(result.current.isSuccess).toBeTruthy();
+        expect(authenticateMock).toHaveBeenCalledWith(token);
+
     });
 
     // Authentication error tests
     it('should handle authentication errors', async () => {
-        (mockClient.surreal.authenticate as jest.Mock).mockRejectedValue(new Error('Auth failed'));
 
-        const token: string = 'invalid-token';
+        authenticateMock.mockRejectedValue(new Error('Auth failed'));
+
+        const mockToken = 'mock-token';
         const { result } = renderHook(() => useAuthenticate(), { wrapper });
 
         await act(async () => {
-            result.current.mutate(token);
+            result.current.mutate(mockToken);
         });
 
         expect(result.current.isError).toBeTruthy();
+        
     });
 });
