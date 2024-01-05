@@ -1,70 +1,86 @@
-import { MemoryCache } from '@/cache';
-import { SurrealClient } from '@/client';
-import { useAbstractMutation } from '@/methods/useAbstract';
 import { useAuthenticate } from '@/methods/useAuthenticate';
-import { act, renderHook } from '@testing-library/react';
-import React from 'react';
-import { Surreal } from 'surrealdb.js';
 
 jest.mock('@/client');
-jest.mock('@/methods/useAbstract');
-jest.mock('@/methods/useAuthUpdated');
-jest.mock('@/library/fetcherFactory');
 
-const authenticateMock = jest.fn();
+jest.mock('@/library/fetcherFactory', () => ({
+    fetcherFactory: jest.fn().mockImplementation(() => jest.fn())
+}));
 
-const mockSurreal = {
-    authenticate: authenticateMock,
-} as Partial<Surreal>;
+jest.mock('@/methods/useAuthUpdated', () => ({
+    useAuthUpdated: jest.fn()
+}));
 
-const mockedSurreal = mockSurreal as unknown as Surreal;
-
-const mockClient = new SurrealClient({
-    cache: new MemoryCache(),
-    surreal: mockedSurreal,
-});
-
-const SurrealContext = React.createContext<SurrealClient>(mockClient);
-
-const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <SurrealContext.Provider value={mockClient}>
-        {children}
-    </SurrealContext.Provider>
-);
+jest.mock('@/methods/useAbstract', () => ({
+    useAbstractMutation: jest.fn()
+}));
 
 describe('useAuthenticate', () => {
+
+    const { fetcherFactory } = require('@/library/fetcherFactory');
+    const { useAuthUpdated } = require('@/methods/useAuthUpdated');
+    const { useAbstractMutation } = require('@/methods/useAbstract');
+
+    const mockAuthUpdated = jest.fn();
+    const mockUseAbstractMutation = jest.fn();
+
     beforeEach(() => {
-        (useAbstractMutation as jest.Mock).mockReturnValue({
-            mutate: jest.fn(),
-            isSuccess: false,
-            isError: false,
+        jest.clearAllMocks();
+
+        global.console = {
+            ...console,
+            error: jest.fn(),
+        };
+
+        useAuthUpdated.mockReturnValue(mockAuthUpdated);
+        fetcherFactory.mockImplementation(() => (context: { surreal: { authenticate: (arg0: any) => Promise<any>; }; }, token: any) => {
+            if (!context || !context.surreal || typeof context.surreal.authenticate !== 'function') {
+                return Promise.reject(new Error('Surreal object or authenticate method is not defined'));
+            }
+
+            return context.surreal.authenticate(token)
+                .then(() => {
+                    mockAuthUpdated();
+                    return true;
+                })
+                .catch((error: any) => {
+                    console.error('Authentication error:', error);
+                    return false;
+                });
         });
+        useAbstractMutation.mockReturnValue(mockUseAbstractMutation);
     });
 
     it('should call surreal.authenticate with the provided token', async () => {
-        authenticateMock.mockResolvedValue(true);
+        const token = 'mock-token';
+        const mockSurreal = {
+            authenticate: jest.fn().mockResolvedValue(true)
+        };
 
-        const token: string = 'mock-token';
-        const { result } = renderHook(() => useAuthenticate(), { wrapper });
+        useAuthenticate();
+        const fetcherCall = fetcherFactory.mock.calls[0];
+        const fetcherFunction = fetcherCall[2];
+        const result = await fetcherFunction({ surreal: mockSurreal }, token);
 
-        await act(async () => {
-            result.current.mutate(token);
-        });
-
-        expect(authenticateMock).toHaveBeenCalledWith(token);
+        expect(mockSurreal.authenticate).toHaveBeenCalledWith(token);
+        expect(mockAuthUpdated).toHaveBeenCalled();
+        expect(result).toBe(true);
     });
 
     // Authentication error tests
     it('should handle authentication errors', async () => {
-        authenticateMock.mockRejectedValue(new Error('Auth failed'));
-
-        const mockToken = 'mock-token';
-        const { result } = renderHook(() => useAuthenticate(), { wrapper });
-
-        await act(async () => {
-            result.current.mutate(mockToken);
-        });
-
-        expect(result.current.isError).toBeTruthy();
+        const token = 'invalid-token';
+        const mockSurreal = {
+            authenticate: jest.fn().mockRejectedValue(new Error('Authentication failed'))
+        };
+    
+        useAuthenticate();
+        const fetcherCall = fetcherFactory.mock.calls[0];
+        const fetcherFunction = fetcherCall[2];
+    
+        await expect(fetcherFunction({ surreal: mockSurreal }, token)).rejects.toThrow('Authentication failed');
+    
+        expect(mockSurreal.authenticate).toHaveBeenCalledWith(token);
+        expect(mockAuthUpdated).not.toHaveBeenCalled();
+        expect(console.error).toHaveBeenCalledWith('Authentication error:', expect.any(Error));
     });
 });
