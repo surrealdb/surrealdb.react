@@ -19,16 +19,23 @@ export function useAuthenticate<Error = unknown>(
         'mutation',
         key,
         (context, token) => {
-            if (!context || !context.surreal || typeof context.surreal.authenticate !== 'function') {
-                throw new Error('Surreal object or authenticate method is not defined');
+            if (
+                !context ||
+                !context.surreal ||
+                typeof context.surreal.authenticate !== 'function'
+            ) {
+                throw new Error(
+                    'Surreal object or authenticate method is not defined'
+                );
             }
 
-            return context.surreal.authenticate(token)
-                .then(result => {
+            return context.surreal
+                .authenticate(token)
+                .then((result) => {
                     authUpdated();
                     return result;
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error('Authentication error:', error);
                     throw error;
                 });
