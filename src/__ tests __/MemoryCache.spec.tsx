@@ -1,4 +1,4 @@
-import { CacheCollection, CacheValue, MemoryCache } from '../cache';
+import { CacheCollection, CacheValue, MemoryCache } from '@/cache';
 
 describe('MemoryCache', () => {
     let cache: MemoryCache;

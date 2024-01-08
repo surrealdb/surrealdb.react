@@ -1,8 +1,11 @@
 'use client';
 
-import { fetcherFactory } from '../library/fetcherFactory';
-import { AbstractMutationParameters, useAbstractMutation } from './useAbstract';
-import { useAuthUpdated } from './useAuthUpdated';
+import { fetcherFactory } from '@/library/fetcherFactory';
+import {
+    AbstractMutationParameters,
+    useAbstractMutation,
+} from '@/methods/useAbstract';
+import { useAuthUpdated } from '@/methods/useAuthUpdated';
 
 export function useAuthenticate<Error = unknown>(
     abstractArguments: AbstractMutationParameters = {}
@@ -11,6 +14,7 @@ export function useAuthenticate<Error = unknown>(
 
     type Args = [token: string];
     const key = JSON.stringify(['__auth', 'authenticate']);
+
     const fetcher = fetcherFactory<Args, boolean, Error>(
         'mutation',
         key,

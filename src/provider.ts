@@ -1,7 +1,7 @@
 'use client';
 
+import { SurrealClient } from '@/client';
 import { ReactNode, createContext, createElement, useMemo } from 'react';
-import { SurrealClient } from './client';
 
 export const SurrealContext = createContext<SurrealClient | undefined>(
     undefined
