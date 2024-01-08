@@ -4,27 +4,28 @@ import { useAuthUpdated } from '@/methods/useAuthUpdated';
 import { useAuthenticate } from '@/methods/useAuthenticate';
 
 jest.mock('@/library/fetcherFactory', () => ({
-    fetcherFactory: jest.fn(),
+    fetcherFactory: jest.fn((...args: Parameters<typeof fetcherFactory>) =>
+        fetcherFactory(...args)
+    ),
 }));
 jest.mock('@/methods/useAuthUpdated', () => ({
-    useAuthUpdated: jest.fn(),
+    useAuthUpdated: jest.fn((...args: Parameters<typeof useAuthUpdated>) =>
+        useAuthUpdated(...args)
+    ),
 }));
 jest.mock('@/methods/useAbstract', () => ({
-    useAbstractMutation: jest.fn(),
+    useAbstractMutation: jest.fn(
+        (...args: Parameters<typeof useAbstractMutation>) =>
+            useAbstractMutation(...args)
+    ),
 }));
 
 describe('useAuthenticate', () => {
     const mockAuthUpdated = jest.fn();
-    const mockUseAbstractMutation = jest.fn();
+    const mockAbstractMutation = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
-
-        global.console = {
-            ...console,
-            error: jest.fn(),
-        };
-
         (useAuthUpdated as jest.Mock).mockReturnValue(mockAuthUpdated);
         (fetcherFactory as jest.Mock).mockImplementation(
             () =>
@@ -61,7 +62,7 @@ describe('useAuthenticate', () => {
                 }
         );
         (useAbstractMutation as jest.Mock).mockReturnValue(
-            mockUseAbstractMutation
+            mockAbstractMutation
         );
     });
 
@@ -97,10 +98,8 @@ describe('useAuthenticate', () => {
             fetcherFunction({ surreal: mockSurreal }, token)
         ).rejects.toThrow('Authentication failed');
         expect(mockSurreal.authenticate).toHaveBeenCalledWith(token);
-        expect(mockAuthUpdated).not.toHaveBeenCalled();
-        expect(console.error).toHaveBeenCalledWith(
-            'Authentication error:',
-            new Error('Authentication failed')
-        );
+
+        // Auth is always updated no matter if the request succeeded or failed
+        expect(mockAuthUpdated).toHaveBeenCalledTimes(1);
     });
 });

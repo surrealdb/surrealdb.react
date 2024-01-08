@@ -18,28 +18,7 @@ export function useAuthenticate<Error = unknown>(
     const fetcher = fetcherFactory<Args, boolean, Error>(
         'mutation',
         key,
-        (context, token) => {
-            if (
-                !context ||
-                !context.surreal ||
-                typeof context.surreal.authenticate !== 'function'
-            ) {
-                throw new Error(
-                    'Surreal object or authenticate method is not defined'
-                );
-            }
-
-            return context.surreal
-                .authenticate(token)
-                .then((result) => {
-                    authUpdated();
-                    return result;
-                })
-                .catch((error) => {
-                    console.error('Authentication error:', error);
-                    throw error;
-                });
-        }
+        ({ surreal }, token) => surreal.authenticate(token).finally(authUpdated)
     );
 
     return useAbstractMutation<Args, boolean, Error>(
