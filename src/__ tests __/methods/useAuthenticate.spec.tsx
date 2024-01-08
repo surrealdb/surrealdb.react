@@ -1,3 +1,4 @@
+import { SurrealClient } from '@/client';
 import { fetcherFactory } from '@/library/fetcherFactory';
 import { useAbstractMutation } from '@/methods/useAbstract';
 import { useAuthUpdated } from '@/methods/useAuthUpdated';
@@ -29,37 +30,8 @@ describe('useAuthenticate', () => {
         (useAuthUpdated as jest.Mock).mockReturnValue(mockAuthUpdated);
         (fetcherFactory as jest.Mock).mockImplementation(
             () =>
-                (
-                    context: {
-                        surreal: {
-                            authenticate: (arg0: string) => Promise<string>;
-                        };
-                    },
-                    token: string
-                ) => {
-                    if (
-                        !context ||
-                        !context.surreal ||
-                        typeof context.surreal.authenticate !== 'function'
-                    ) {
-                        return Promise.reject(
-                            new Error(
-                                'Surreal object or authenticate method is not defined'
-                            )
-                        );
-                    }
-
-                    return context.surreal
-                        .authenticate(token)
-                        .then(() => {
-                            mockAuthUpdated();
-                            return true;
-                        })
-                        .catch((error: string) => {
-                            console.error('Authentication error:', error);
-                            return false;
-                        });
-                }
+                ({ surreal }: SurrealClient, token: string) =>
+                    surreal.authenticate(token).finally(mockAuthUpdated)
         );
         (useAbstractMutation as jest.Mock).mockReturnValue(
             mockAbstractMutation
