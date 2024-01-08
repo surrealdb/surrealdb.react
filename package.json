@@ -23,7 +23,7 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "ts": "tsc --watch",
-    "test": "concurrently --names \"jest,surreal\" --kill-others \"sleep 1 && pnpm test:jest\" \"pnpm test:surrealdb\"",
+    "test": "concurrently --names \"jest,surreal\" --success \"command-jest\" --kill-others \"sleep 1 && pnpm test:jest\" \"pnpm test:surrealdb\"",
     "test:jest": "jest",
     "test:surrealdb": "surreal start --user root --pass root"
 
