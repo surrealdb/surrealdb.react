@@ -1,41 +1,43 @@
+import { fetcherFactory } from '@/library/fetcherFactory';
+import { useAbstractMutation } from '@/methods/useAbstract';
 import { useMerge } from '@/methods/useMerge';
-import { renderHook } from '@testing-library/react';
-// import { mockMergeParams } from '@/mockData';
+import { act, renderHook } from '@testing-library/react';
 
-jest.mock('@/library/fetcherFactory', () => ({
-    fetcherFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
-
-jest.mock('@/methods/useAbstract', () => ({
-    useAbstractMutation: jest.fn((_key, _fetcher, params) => {
-        console.log('Called with:', params);
-        return { mutate: jest.fn() };
-    }),
-}));
+jest.mock('@/library/fetcherFactory');
+jest.mock('@/methods/useAbstract');
 
 describe('useMerge', () => {
-    // it('should correctly use mockMergeParams', () => {
-    //     renderHook(() => useMerge(mockMergeParams));
+    const mockResource = 'testResource';
+    const mockMutationKey = ['testKey'];
 
-    //     const mockUseAbstractMutation = require('@/methods/useAbstract').useAbstractMutation;
+    it('should use fetcherFactory and useAbstractMutation with correct parameters', () => {
+        const mockMutationResult = { mutate: jest.fn() };
+        (useAbstractMutation as jest.Mock).mockReturnValue(mockMutationResult);
+        (fetcherFactory as jest.Mock).mockImplementation(
+            (_, _key, fetcher) => fetcher
+        );
 
-    //     expect(mockUseAbstractMutation).toHaveBeenCalledWith(
-    //         JSON.stringify(mockMergeParams.mutationKey),
-    //         expect.any(Function),
-    //         expect.objectContaining({
-    //             resource: mockMergeParams.resource,
-    //             data: mockMergeParams.data,
-    //         }),
-    //     );
+        const { result } = renderHook(() =>
+            useMerge({
+                mutationKey: mockMutationKey,
+                resource: mockResource,
+            })
+        );
 
-    // });
+        act(() => {
+            result.current.mutate();
+        });
 
-    it('should correctly use parameters', () => {
-        const testParams = {
-            mutationKey: ['merge', 'test'],
-            resource: 'testResource',
-            data: { name: 'Test', value: 'Value' },
-        };
-        renderHook(() => useMerge(testParams));
+        expect(fetcherFactory).toHaveBeenCalledWith(
+            'mutation',
+            JSON.stringify(mockMutationKey),
+            expect.any(Function)
+        );
+        expect(useAbstractMutation).toHaveBeenCalledWith(
+            JSON.stringify(mockMutationKey),
+            expect.any(Function),
+            expect.any(Object)
+        );
+        expect(mockMutationResult.mutate).toHaveBeenCalled();
     });
 });
