@@ -47,10 +47,10 @@ describe('useQueryMutation', () => {
         const { result } = renderHook(
             () =>
                 useQueryMutation({
-                        mutationKey: ['exampleMutationKey'],
-                        query: 'INSERT INTO exampleTable VALUES (@value)',
-                        queryBindings: { exampleBinding: 'value' },
-                    }),
+                    mutationKey: ['exampleMutationKey'],
+                    query: 'INSERT INTO exampleTable VALUES (@value)',
+                    queryBindings: { exampleBinding: 'value' },
+                }),
             { wrapper }
         );
 
@@ -59,6 +59,5 @@ describe('useQueryMutation', () => {
             expect(result.current).toBeDefined();
             expect(result.current.data).toEqual('mock data');
         });
-
     });
 });

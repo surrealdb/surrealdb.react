@@ -1,10 +1,10 @@
-import { useAbstractQuery } from '@/methods/useAbstract';
-import { useSelect } from '@/methods/useSelect';
-import { fetcherFactory } from '@/library/fetcherFactory';
-import { renderHook, waitFor } from '@testing-library/react';
 import { MemoryCache } from '@/cache';
 import { SurrealClient } from '@/client';
+import { fetcherFactory } from '@/library/fetcherFactory';
+import { useAbstractQuery } from '@/methods/useAbstract';
+import { useSelect } from '@/methods/useSelect';
 import { SurrealContext } from '@/provider';
+import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 import { Surreal } from 'surrealdb.js';
 
@@ -50,12 +50,13 @@ describe('useSelect', () => {
         const resource = 'exampleResource';
         const abstractArguments = {};
 
-        const { result } = renderHook(() => 
-            useSelect({
-                queryKey,
-                resource,
-                ...abstractArguments,
-            }),
+        const { result } = renderHook(
+            () =>
+                useSelect({
+                    queryKey,
+                    resource,
+                    ...abstractArguments,
+                }),
             { wrapper }
         );
 
@@ -63,13 +64,13 @@ describe('useSelect', () => {
             expect(fetcherFactory).toHaveBeenCalledWith(
                 'query',
                 JSON.stringify(queryKey),
-                expect.any(Function),
+                expect.any(Function)
             );
 
             expect(useAbstractQuery).toHaveBeenCalledWith(
                 JSON.stringify(queryKey),
                 expect.any(Function),
-                expect.objectContaining(abstractArguments),
+                expect.objectContaining(abstractArguments)
             );
 
             expect(result.current.data).toEqual('mock data');
