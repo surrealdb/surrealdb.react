@@ -1,6 +1,6 @@
 import { MemoryCache } from '@/cache';
 import { SurrealClient } from '@/client';
-import { useSignin } from '@/methods/useSignin';
+import { useSignup } from '@/methods/useSignup';
 import { SurrealContext } from '@/provider';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
@@ -9,17 +9,26 @@ import { Surreal } from 'surrealdb.js';
 jest.mock('@/library/fetcherFactory', () => ({
     fetcherFactory: jest
         .fn()
-        .mockImplementation(() => jest.fn().mockResolvedValue('mocked token')),
+        .mockImplementation(() => jest.fn().mockResolvedValue('mocked data')),
 }));
 
 jest.mock('@/methods/useAbstract', () => ({
     useAbstractMutation: jest.fn().mockImplementation(() => ({
-        mutate: jest.fn(() => Promise.resolve({ data: 'user signin' })),
+        mutate: jest.fn((credentials) => {
+            if (credentials.email === 'test@surrealdb.com') {
+                return Promise.resolve({ data: 'signup success' });
+            } else {
+                return Promise.resolve({
+                    data: 'signup failed',
+                    error: 'Invalid credentials',
+                });
+            }
+        }),
         isLoading: false,
+        isSuccess: true,
         error: null,
         isPending: false,
         isError: false,
-        isSuccess: true,
         isFetching: false,
         isIdle: true,
         status: 'success',
@@ -30,6 +39,13 @@ jest.mock('@/methods/useAbstract', () => ({
 
 jest.mock('@/methods/useInfo', () => ({
     useInfo: jest.fn().mockImplementation(() => ({
+        refetch: jest.fn(),
+        isPending: false,
+    })),
+}));
+
+jest.mock('@/methods/useAuthUpdated', () => ({
+    useAuthUpdated: jest.fn().mockImplementation(() => ({
         refetch: jest.fn(),
         isPending: false,
     })),
@@ -46,10 +62,15 @@ const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     </SurrealContext.Provider>
 );
 
-describe('useSignin', () => {
-    it('should execute signin process with provided credentials and update auth state', async () => {
-        const credentials = { username: 'testUser', password: 'testPass' };
-        const { result } = renderHook(() => useSignin(), { wrapper });
+describe('useSignup', () => {
+    it('should execute signup process with provided credentials and update auth state', async () => {
+        const credentials = {
+            email: 'test@surrealdb.com',
+            password: 'testPassword',
+            scope: 'ScopeAuth',
+        };
+
+        const { result } = renderHook(() => useSignup(), { wrapper });
 
         let resolvedValue: string;
 
@@ -59,7 +80,7 @@ describe('useSignin', () => {
 
         await waitFor(() => {
             expect(result.current.isSuccess).toBeTruthy();
-            expect(resolvedValue).toEqual({ data: 'user signin' });
+            expect(resolvedValue).toEqual({ data: 'signup success' });
         });
     });
 });
