@@ -1,12 +1,12 @@
 'use client';
 
-import { type Surreal } from 'surrealdb.js';
 import { fetcherFactory } from '@/library/fetcherFactory';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
 } from '@/methods/useAbstract';
 import { useAuthUpdated } from '@/methods/useAuthUpdated';
+import { type Surreal } from 'surrealdb.js';
 
 type AnyAuth = Parameters<Surreal['signin']>[0];
 

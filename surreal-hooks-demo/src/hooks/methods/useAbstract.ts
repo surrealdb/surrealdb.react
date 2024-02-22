@@ -1,5 +1,11 @@
 'use client';
 
+import { CacheCollection, CacheValue, emptyCacheValue } from '@/cache';
+import { SurrealClient } from '@/client';
+import { NoProviderError } from '@/errors';
+import { ParametersExceptFirst } from '@/library/ParametersExceptFirst';
+import useOnUnmount from '@/library/useOnUnmount';
+import { SurrealContext } from '@/provider';
 import {
     useCallback,
     useContext,
@@ -7,12 +13,6 @@ import {
     useRef,
     useSyncExternalStore,
 } from 'react';
-import { CacheCollection, CacheValue, emptyCacheValue } from '@/cache';
-import { SurrealClient } from '@/client';
-import { NoProviderError } from '@/errors';
-import { ParametersExceptFirst } from '@/library/ParametersExceptFirst';
-import useOnUnmount from '@/library/useOnUnmount';
-import { SurrealContext } from '@/provider';
 
 export type AbstractParameters =
     | AbstractQueryParameters

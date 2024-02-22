@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
 import { useInfo } from '@/methods/useInfo';
+import { useCallback } from 'react';
 
 export function useAuthUpdated() {
     const { refetch: refetchInfo, isPending: isInfoPending } = useInfo({

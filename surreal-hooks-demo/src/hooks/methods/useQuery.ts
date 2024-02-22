@@ -1,11 +1,11 @@
 'use client';
 
-import { PreparedQuery, type Surreal } from 'surrealdb.js';
 import { fetcherFactory } from '@/library/fetcherFactory';
 import {
     AbstractQueryParameters,
     useAbstractQuery,
 } from '@/methods/useAbstract';
+import { PreparedQuery, type Surreal } from 'surrealdb.js';
 
 type RawQueryResult = Awaited<ReturnType<Surreal['query']>>[number];
 
