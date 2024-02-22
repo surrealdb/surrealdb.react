@@ -1,11 +1,11 @@
 'use client';
 
-import { fetcherFactory } from '../library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
-} from '../methods/useAbstract';
-import { useAuthUpdated } from '../methods/useAuthUpdated';
+} from '@/methods/useAbstract';
+import { useAuthUpdated } from '@/methods/useAuthUpdated';
 
 export function useAuthenticate<Error = unknown>(
     abstractArguments: AbstractMutationParameters = {}

@@ -1,10 +1,10 @@
 'use client';
 
-import { fetcherFactory } from '../library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
-} from '../methods/useAbstract';
+} from '@/methods/useAbstract';
 
 export function useDelete<
     Data extends Record<string, unknown>,

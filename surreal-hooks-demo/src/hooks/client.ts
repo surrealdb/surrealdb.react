@@ -1,5 +1,5 @@
 import { Surreal } from 'surrealdb.js';
-import { AbstractCache, MemoryCache } from './cache';
+import { AbstractCache, MemoryCache } from '@/cache';
 export class SurrealClient {
     public readonly cache: AbstractCache;
     public readonly surreal: Surreal;

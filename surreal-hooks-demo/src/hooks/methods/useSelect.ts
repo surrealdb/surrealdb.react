@@ -1,10 +1,10 @@
 'use client';
 
-import { fetcherFactory } from '../library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import {
     AbstractQueryParameters,
     useAbstractQuery,
-} from '../methods/useAbstract';
+} from '@/methods/useAbstract';
 
 export function useSelect<
     Data extends Record<string, unknown>,
