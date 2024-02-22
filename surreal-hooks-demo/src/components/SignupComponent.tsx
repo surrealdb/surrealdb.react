@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSignup } from '../hooks/methods/useSignup';
+import { useSignup } from '../../../src/methods/useSignup';
 
 const SignupComponent: React.FC = () => {
     const [email, setEmail] = useState<string>('');
