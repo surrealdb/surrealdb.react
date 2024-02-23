@@ -21,15 +21,15 @@ const SignupComponent: React.FC = () => {
                 />
             </div>
             <div>
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-            />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                />
             </div>
             <div>
-                <button onClick={handleSignup}>Sign Up</button> 
+                <button onClick={handleSignup}>Sign Up</button>
             </div>
             {isSuccess && <p>Signup successful!</p>}
             {isError && <p>Error: {error as string}</p>}
