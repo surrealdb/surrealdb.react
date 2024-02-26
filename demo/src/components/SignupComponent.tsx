@@ -3,11 +3,11 @@ import { useSignup } from '../../../src/methods/useSignup';
 
 const SignupComponent: React.FC = () => {
     const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [pass, setPass] = useState<string>('');
     const { mutate: signup, isSuccess, isError, error } = useSignup();
 
     const handleSignup = async () => {
-        await signup({ email, password, scope: 'user' });
+        await signup({ email, pass, scope: 'account' });
     };
 
     return (
@@ -23,8 +23,8 @@ const SignupComponent: React.FC = () => {
             <div>
                 <input
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={pass}
+                    onChange={(e) => setPass(e.target.value)}
                     placeholder="Password"
                 />
             </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from '../../src';
+import SigninComponent from './components/SigninComponent';
 import SignupComponent from './components/SignupComponent';
 
 function Component({ refetchInterval }: { refetchInterval?: number }) {
@@ -39,6 +40,13 @@ export default function App() {
 
             <h2>useSignup hook</h2>
             <SignupComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
+
+            <h2>useSign hook</h2>
+            <SigninComponent />
         </>
     );
 }
