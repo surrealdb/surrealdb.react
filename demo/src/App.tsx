@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '../../src';
 import CreateComponent from './components/CreateComponent';
+import DeleteComponent from './components/DeleteComponent';
 import SigninComponent from './components/SigninComponent';
 import SignupComponent from './components/SignupComponent';
 import UpdateComponent from './components/UpdateComponent';
@@ -63,6 +64,13 @@ export default function App() {
 
             <h2>useUpdate</h2>
             <UpdateComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
+
+            <h2>useDelete</h2>
+            <DeleteComponent />
         </>
     );
 }
