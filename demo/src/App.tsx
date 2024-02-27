@@ -1,7 +1,9 @@
 import React from 'react';
 import { useQuery } from '../../src';
+import CreateComponent from './components/CreateComponent';
 import SigninComponent from './components/SigninComponent';
 import SignupComponent from './components/SignupComponent';
+import UpdateComponent from './components/UpdateComponent';
 
 function Component({ refetchInterval }: { refetchInterval?: number }) {
     const { data, error, refetch } = useQuery<[number]>({
@@ -31,22 +33,36 @@ function Component({ refetchInterval }: { refetchInterval?: number }) {
 export default function App() {
     return (
         <>
-            <h2>useQuery hook</h2>
+            <h2>useQuery</h2>
             <Component />
 
             <p>
                 ---------------------------------------------------------------------
             </p>
 
-            <h2>useSignup hook</h2>
+            <h2>useSignup</h2>
             <SignupComponent />
 
             <p>
                 ---------------------------------------------------------------------
             </p>
 
-            <h2>useSign hook</h2>
+            <h2>useSignIn</h2>
             <SigninComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
+
+            <h2>useCreate</h2>
+            <CreateComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
+
+            <h2>useUpdate</h2>
+            <UpdateComponent />
         </>
     );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSignup } from '../../../src/methods/useSignup';
 
-const SignupComponent: React.FC = () => {
+const UseSignupComponent: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [pass, setPass] = useState<string>('');
     const { mutate: signup, isSuccess, isError, error } = useSignup();
@@ -37,4 +37,4 @@ const SignupComponent: React.FC = () => {
     );
 };
 
-export default SignupComponent;
+export default UseSignupComponent;

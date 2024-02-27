@@ -1,25 +1,44 @@
 import React, { useState } from 'react';
-import { useSignin } from '../../../src/methods/useSignin';
+import { useCreate } from '../../../src/methods/useCreate';
 
-const UseSignInComponent: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
-    const [pass, setPass] = useState<string>('');
+const UseCreateComponent: React.FC = () => {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
+    const mutationKey = ['createUser'];
+    const resource = 'user';
+
     const {
-        mutate: signin,
+        mutate: createUser,
+        isLoading,
         isSuccess,
         isError,
         error,
-        isLoading,
-    } = useSignin();
+    } = useCreate({
+        mutationKey,
+        resource,
+        data: { username, email, pass },
+    });
 
-    const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await signin({ email, pass, scope: 'account' });
+        await createUser({ username, email, pass });
     };
 
     return (
         <div>
-            <form onSubmit={handleSignIn}>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="username">Username:</label>
+                    <input
+                        id="username"
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
                 <div>
                     <label htmlFor="email">Email:</label>
                     <input
@@ -41,10 +60,10 @@ const UseSignInComponent: React.FC = () => {
                     />
                 </div>
                 <button type="submit" disabled={isLoading}>
-                    Sign In
+                    Create User
                 </button>
             </form>
-            {isSuccess && <p>Sign in successful!</p>}
+            {isSuccess && <p>User created successfully!</p>}
             {isError && (
                 <p>
                     Error:{' '}
@@ -55,4 +74,4 @@ const UseSignInComponent: React.FC = () => {
     );
 };
 
-export default UseSignInComponent;
+export default UseCreateComponent;
