@@ -1,6 +1,7 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useKey } from '@/library/key';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
@@ -21,8 +22,8 @@ export function useMerge<
     data?: Bindings;
 }) {
     type Args = [data?: Bindings];
-    const key = JSON.stringify(mutationKey);
-    const fetcher = fetcherFactory<Args, Data[], Error>(
+    const key = useKey(mutationKey);
+    const fetcher = useFetcherFactory<Args, Data[], Error>(
         'mutation',
         key,
         ({ surreal }, dataOverwrite) =>

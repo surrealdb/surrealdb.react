@@ -1,6 +1,6 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
@@ -15,7 +15,7 @@ export function useAuthenticate<Error = unknown>(
     type Args = [token: string];
     const key = JSON.stringify(['__auth', 'authenticate']);
 
-    const fetcher = fetcherFactory<Args, boolean, Error>(
+    const fetcher = useFetcherFactory<Args, boolean, Error>(
         'mutation',
         key,
         ({ surreal }, token) => surreal.authenticate(token).finally(authUpdated)

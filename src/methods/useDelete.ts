@@ -1,6 +1,7 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useKey } from '@/library/key';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
@@ -17,8 +18,8 @@ export function useDelete<
     mutationKey: unknown[];
     resource: string;
 }) {
-    const key = JSON.stringify(mutationKey);
-    const fetcher = fetcherFactory<[], Data[], Error>(
+    const key = useKey(mutationKey);
+    const fetcher = useFetcherFactory<[], Data[], Error>(
         'mutation',
         key,
         ({ surreal }) => surreal.merge<Data>(resource)

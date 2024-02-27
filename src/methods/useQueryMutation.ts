@@ -1,6 +1,7 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useKey } from '@/library/key';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
@@ -23,8 +24,8 @@ export function useQueryMutation<
     queryBindings?: Record<string, unknown>;
 }) {
     type Args = [bindings?: Record<string, unknown>];
-    const key = JSON.stringify(mutationKey);
-    const fetcher = fetcherFactory<Args, Data, Error>(
+    const key = useKey(mutationKey);
+    const fetcher = useFetcherFactory<Args, Data, Error>(
         'mutation',
         key,
         ({ surreal }, bindings) =>
