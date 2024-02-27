@@ -1,6 +1,7 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useKey } from '@/library/key';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
@@ -16,8 +17,8 @@ export function useSignup<Error = unknown>(
     const authUpdated = useAuthUpdated();
 
     type Args = [credentials: ScopeAuth];
-    const key = JSON.stringify(['__auth', 'signup']);
-    const fetcher = fetcherFactory<Args, string, Error>(
+    const key = useKey(['__auth', 'signup']);
+    const fetcher = useFetcherFactory<Args, string, Error>(
         'mutation',
         key,
         ({ surreal }, credentials) =>

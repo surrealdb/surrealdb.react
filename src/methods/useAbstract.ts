@@ -10,6 +10,7 @@ import {
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useRef,
     useSyncExternalStore,
 } from 'react';
@@ -82,7 +83,7 @@ export function useAbstract<T extends unknown[], Data, Error = unknown>(
     useEffect(() => {
         cache.createEmptyCacheValue(collection, key);
         initialFetch();
-    }, []);
+    }, [collection, key]);
 
     useOnUnmount(() => {
         cache.invalidate(collection, key);
@@ -137,13 +138,16 @@ export function useRefetchOnWindowFocus<T extends unknown[], Data>(
     params: AbstractParameters,
     refetch: (...args: T) => Promise<Data>
 ) {
-    const refetchOnWindowFocus =
-        collection == 'query'
-            ? 'refetchOnWindowFocus' in params &&
-              typeof params.refetchOnWindowFocus == 'boolean'
-                ? params.refetchOnWindowFocus
-                : true
-            : false;
+    const refetchOnWindowFocus = useMemo(
+        () =>
+            collection == 'query'
+                ? 'refetchOnWindowFocus' in params &&
+                  typeof params.refetchOnWindowFocus == 'boolean'
+                    ? params.refetchOnWindowFocus
+                    : true
+                : false,
+        [collection, params]
+    );
 
     useEffect(() => {
         function listener() {
@@ -154,7 +158,7 @@ export function useRefetchOnWindowFocus<T extends unknown[], Data>(
 
         window.addEventListener('focus', listener);
         return () => window.removeEventListener('focus', listener);
-    });
+    }, [refetchOnWindowFocus]);
 }
 
 export function useInitialFetch<T extends unknown[], Data>(
@@ -165,12 +169,15 @@ export function useInitialFetch<T extends unknown[], Data>(
     key: string
 ) {
     const initialised = useRef(false);
-    const enabled =
-        collection == 'query'
-            ? 'enabled' in params && typeof params.enabled == 'boolean'
-                ? params.enabled
-                : true
-            : false;
+    const enabled = useMemo(
+        () =>
+            collection == 'query'
+                ? 'enabled' in params && typeof params.enabled == 'boolean'
+                    ? params.enabled
+                    : true
+                : false,
+        [collection, params]
+    );
 
     return useCallback(() => {
         if (!initialised.current) {

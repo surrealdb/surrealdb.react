@@ -1,6 +1,7 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useKey } from '@/library/key';
 import {
     AbstractQueryParameters,
     useAbstractQuery,
@@ -20,8 +21,8 @@ export function useQuery<Data extends RawQueryResult[], Error = unknown>({
     queryBindings?: Record<string, unknown>;
 }) {
     type Args = [bindings?: Record<string, unknown>];
-    const key = JSON.stringify(queryKey);
-    const fetcher = fetcherFactory<Args, Data, Error>(
+    const key = useKey(queryKey);
+    const fetcher = useFetcherFactory<Args, Data, Error>(
         'query',
         key,
         ({ surreal }, bindings?: Record<string, unknown>) =>
