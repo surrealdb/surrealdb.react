@@ -3,7 +3,7 @@ import { CacheCollection, SurrealClient } from '@/index';
 import { ParametersExceptFirst } from '@/library/ParametersExceptFirst';
 import { useCallback } from 'react';
 
-export function useFetcherFactory<
+export function fetcherFactory<
     T extends unknown[],
     Data = unknown,
     Error = unknown,

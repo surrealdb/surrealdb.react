@@ -1,4 +1,4 @@
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import { useAbstractMutation } from '@/methods/useAbstract';
 import { useCreate } from '@/methods/useCreate';
 import { act, renderHook } from '@testing-library/react';
@@ -14,7 +14,7 @@ describe('useCreate', () => {
     it('should use fetcherFactory and useAbstractMutation with correct parameters', () => {
         const mockMutationResult = { mutate: jest.fn() };
         (useAbstractMutation as jest.Mock).mockReturnValue(mockMutationResult);
-        (useFetcherFactory as jest.Mock).mockImplementation(
+        (fetcherFactory as jest.Mock).mockImplementation(
             (_, _key, fetcher) => fetcher
         );
 
@@ -30,7 +30,7 @@ describe('useCreate', () => {
             result.current.mutate(mockData);
         });
 
-        expect(useFetcherFactory).toHaveBeenCalledWith(
+        expect(fetcherFactory).toHaveBeenCalledWith(
             'mutation',
             JSON.stringify(mockMutationKey),
             expect.any(Function)
