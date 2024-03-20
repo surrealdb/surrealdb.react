@@ -22,7 +22,7 @@ export function useDelete<
     const fetcher = useFetcherFactory<[], Data[], Error>(
         'mutation',
         key,
-        ({ surreal }) => surreal.merge<Data>(resource)
+        ({ surreal }) => surreal.delete<Data>(resource)
     );
     return useAbstractMutation<[], Data[], Error>(
         key,
