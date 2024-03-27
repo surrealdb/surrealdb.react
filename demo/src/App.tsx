@@ -5,6 +5,8 @@ import DeleteComponent from './components/DeleteComponent';
 import SigninComponent from './components/SigninComponent';
 import SignupComponent from './components/SignupComponent';
 import UpdateComponent from './components/UpdateComponent';
+import InfoComponent from './components/InfoComponent';
+import MergeComponent from './components/MergeComponent';
 
 function Component({ refetchInterval }: { refetchInterval?: number }) {
     const { data, error, refetch } = useQuery<[number]>({
@@ -71,6 +73,24 @@ export default function App() {
 
             <h2>useDelete</h2>
             <DeleteComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
+
+            <h2>useInfo</h2>
+            <InfoComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
+
+            <h2>useMerge</h2>
+            <MergeComponent />
+
+            <p>
+                ---------------------------------------------------------------------
+            </p>
         </>
     );
 }
