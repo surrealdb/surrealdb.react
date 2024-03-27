@@ -17,7 +17,10 @@ const UserInfoComponent = () => {
                 </ul>
             )}
             {!isLoading && !userInfo && !error && (
-                <p>No user information available. Click the button above to fetch user info.</p>
+                <p>
+                    No user information available. Click the button above to
+                    fetch user info.
+                </p>
             )}
         </div>
     );

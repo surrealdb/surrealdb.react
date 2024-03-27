@@ -2,11 +2,11 @@ import React from 'react';
 import { useQuery } from '../../src';
 import CreateComponent from './components/CreateComponent';
 import DeleteComponent from './components/DeleteComponent';
+import InfoComponent from './components/InfoComponent';
+import MergeComponent from './components/MergeComponent';
 import SigninComponent from './components/SigninComponent';
 import SignupComponent from './components/SignupComponent';
 import UpdateComponent from './components/UpdateComponent';
-import InfoComponent from './components/InfoComponent';
-import MergeComponent from './components/MergeComponent';
 
 function Component({ refetchInterval }: { refetchInterval?: number }) {
     const { data, error, refetch } = useQuery<[number]>({

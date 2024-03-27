@@ -52,14 +52,19 @@ const MergeComponent: React.FC = () => {
                         disabled={isLoading}
                     />
                 </div>
-                <button type="submit" disabled={isLoading}>Merge</button>
+                <button type="submit" disabled={isLoading}>
+                    Merge
+                </button>
             </form>
             {isLoading && <p>Updating...</p>}
             {isSuccess && <p>Profile merged successfully!</p>}
-            {isError && <p>Error updating profile: {error?.message || 'Unknown error'}</p>}
+            {isError && (
+                <p>
+                    Error updating profile: {error?.message || 'Unknown error'}
+                </p>
+            )}
         </div>
     );
 };
 
 export default MergeComponent;
-
