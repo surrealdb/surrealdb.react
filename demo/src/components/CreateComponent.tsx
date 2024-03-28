@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQueryMutation } from '../../../src';
 import { useCreate } from '../../../src/methods/useCreate';
 
 const UseCreateComponent: React.FC = () => {
@@ -7,7 +8,7 @@ const UseCreateComponent: React.FC = () => {
     const [pass, setPass] = useState('');
 
     const mutationKey = ['createUser'];
-    const resource = 'user';
+    const resource = 'test';
 
     const {
         mutate: createUser,
@@ -21,16 +22,17 @@ const UseCreateComponent: React.FC = () => {
         data: { username, email, pass },
     });
 
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     await createUser({ username, email, pass });
-    // };
+    // async function checkUserExists(email) {
+    //     const response = await fetch(`/api/users/exists?email=${email}`);
+    //     const data = await response.json();
+    //     return data.exists; // Assuming the API returns { exists: true/false }
+    // }
 
-    async function checkUserExists(email) {
-        const response = await fetch(`/api/users/exists?email=${email}`);
-        const data = await response.json();
-        return data.exists; // Assuming the API returns { exists: true/false }
-    }
+    const { mutate: checkUserExists } = useQueryMutation({
+        mutationKey: ['createUser', 'checkUserExists'],
+        query: `RETURN !!(SELECT id FROM ONLY user WHERE email = $email LIMIT 1)`,
+        data: { email },
+    });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
