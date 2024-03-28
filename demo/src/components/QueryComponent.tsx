@@ -1,7 +1,11 @@
 import React from 'react';
 import { useQuery } from '../../../src/methods/useQuery';
 
-const UseQueryComponent = ({ refetchInterval }: { refetchInterval?: number }) => {
+const UseQueryComponent = ({
+    refetchInterval,
+}: {
+    refetchInterval?: number;
+}) => {
     const { data, error, refetch } = useQuery<[number]>({
         queryKey: ['test'],
         query: 'RETURN $resource',
@@ -24,6 +28,6 @@ const UseQueryComponent = ({ refetchInterval }: { refetchInterval?: number }) =>
             </button>
         </div>
     );
-}
+};
 
 export default UseQueryComponent;
