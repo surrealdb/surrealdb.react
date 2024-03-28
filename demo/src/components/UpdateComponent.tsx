@@ -29,6 +29,7 @@ const UseUpdateComponent: React.FC = () => {
 
     return (
         <div>
+            <h2>Update a user</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="userId">User ID:</label>

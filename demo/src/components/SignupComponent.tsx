@@ -12,6 +12,7 @@ const UseSignupComponent: React.FC = () => {
 
     return (
         <div>
+            <h2>User SignUp</h2>
             <div>
                 <input
                     type="email"

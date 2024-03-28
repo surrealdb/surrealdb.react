@@ -42,6 +42,7 @@ const UseCreateComponent: React.FC = () => {
 
     return (
         <div>
+            <h2>Create a user</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="username">Username:</label>

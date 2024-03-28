@@ -6,6 +6,7 @@ const UserInfoComponent = () => {
 
     return (
         <div>
+            <h2>User Information</h2>
             <button onClick={fetchUserInfo} disabled={isLoading}>
                 {isLoading ? 'Loading...' : 'Fetch User Info'}
             </button>
