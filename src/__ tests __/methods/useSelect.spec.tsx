@@ -1,6 +1,6 @@
 import { MemoryCache } from '@/cache';
 import { SurrealClient } from '@/client';
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import { useAbstractQuery } from '@/methods/useAbstract';
 import { useSelect } from '@/methods/useSelect';
 import { SurrealContext } from '@/provider';
@@ -61,7 +61,7 @@ describe('useSelect', () => {
         );
 
         await waitFor(() => {
-            expect(useFetcherFactory).toHaveBeenCalledWith(
+            expect(fetcherFactory).toHaveBeenCalledWith(
                 'query',
                 JSON.stringify(queryKey),
                 expect.any(Function)

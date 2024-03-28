@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import { useKey } from '@/library/key';
 import {
     AbstractMutationParameters,
@@ -14,7 +14,7 @@ export function useInvalidate<Error = unknown>(
     const authUpdated = useAuthUpdated();
 
     const key = useKey(['__auth', 'invalidate']);
-    const fetcher = useFetcherFactory<[], void, Error>(
+    const fetcher = fetcherFactory<[], void, Error>(
         'mutation',
         key,
         ({ surreal }) => surreal.invalidate().finally(authUpdated)

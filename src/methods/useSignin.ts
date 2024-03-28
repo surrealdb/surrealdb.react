@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { fetcherFactory } from '@/library/fetcherFactory';
 import { useKey } from '@/library/key';
 import {
     AbstractMutationParameters,
@@ -18,7 +18,7 @@ export function useSignin<Error = unknown>(
 
     type Args = [credentials: AnyAuth];
     const key = useKey(['__auth', 'signin']);
-    const fetcher = useFetcherFactory<Args, string, Error>(
+    const fetcher = fetcherFactory<Args, string, Error>(
         'mutation',
         key,
         ({ surreal }, credentials) =>
