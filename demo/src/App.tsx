@@ -61,19 +61,6 @@ export default function App() {
             <div className="component-viewer">
                 <ActiveComponent />
             </div>
-            <style>{`
-        .app-container {
-          text-align: center;
-        }
-        .navigation {
-          margin-bottom: 20px;
-        }
-        .component-viewer {
-          border: 1px solid #ccc;
-          padding: 20px;
-          display: inline-block;
-        }
-      `}</style>
         </div>
     );
 }
