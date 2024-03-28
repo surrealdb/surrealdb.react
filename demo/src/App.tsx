@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { synthwave84 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import CreateComponent from './components/CreateComponent';
 import DeleteComponent from './components/DeleteComponent';
 import InfoComponent from './components/InfoComponent';
@@ -74,8 +74,7 @@ export default function App() {
 
             {showParagraph && (
                 <div className="code-container" style={{ opacity }}>
-                    <h3>Run the following commands in your terminal</h3>
-                    <SyntaxHighlighter language="bash" style={materialLight}>
+                    <SyntaxHighlighter language="bash" style={synthwave84}>
                         {codeString}
                     </SyntaxHighlighter>
                 </div>
