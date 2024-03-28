@@ -3,18 +3,19 @@
 }
 
 .code-container {
-margin: 20px auto;
-padding: 20px;
-background-color: #f5f5f5;
-border-radius: 10px;
-box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-max-width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 65%;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .navigation {
-margin: 20px 0;
+    margin: 20px 0;
 }
 
 .component-viewer {
-margin-top: 20px;
+    margin-top: 20px;
 }

@@ -25,24 +25,30 @@ const components = [
 export default function App() {
     const [activeComponentIndex, setActiveComponentIndex] = useState(0);
     const [showParagraph, setShowParagraph] = useState(true);
+    const [opacity, setOpacity] = useState(1);
+
+    const fadeOutParagraph = () => {
+        setOpacity(0);
+        setTimeout(() => setShowParagraph(false), 500);
+    };
 
     const navigateLeft = () => {
         setActiveComponentIndex((prevIndex) =>
             prevIndex === 0 ? components.length - 1 : prevIndex - 1
         );
-        setShowParagraph(false);
+        fadeOutParagraph();
     };
 
     const navigateRight = () => {
         setActiveComponentIndex((prevIndex) =>
             prevIndex === components.length - 1 ? 0 : prevIndex + 1
         );
-        setShowParagraph(false);
+        fadeOutParagraph();
     };
 
     const handleSelectChange = (e) => {
         setActiveComponentIndex(Number(e.target.value));
-        setShowParagraph(false);
+        fadeOutParagraph();
     };
 
     const ActiveComponent = components[activeComponentIndex].component;
@@ -67,7 +73,7 @@ export default function App() {
             <h2>SurrealDB React Hooks Demo</h2>
 
             {showParagraph && (
-                <div className="code-container">
+                <div className="code-container" style={{ opacity }}>
                     <h3>Run the following commands in your terminal</h3>
                     <SyntaxHighlighter language="bash" style={materialLight}>
                         {codeString}
