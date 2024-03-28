@@ -22,12 +22,6 @@ const UseCreateComponent: React.FC = () => {
         data: { username, email, pass },
     });
 
-    // async function checkUserExists(email) {
-    //     const response = await fetch(`/api/users/exists?email=${email}`);
-    //     const data = await response.json();
-    //     return data.exists; // Assuming the API returns { exists: true/false }
-    // }
-
     const { mutate: checkUserExists } = useQueryMutation({
         mutationKey: ['createUser', 'checkUserExists'],
         query: `RETURN !!(SELECT id FROM ONLY user WHERE email = $email LIMIT 1)`,
@@ -37,14 +31,12 @@ const UseCreateComponent: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Check if the user already exists
         const userExists = await checkUserExists(email);
         if (userExists) {
-            alert('A user with this email already exists.'); // Use a more sophisticated feedback mechanism
+            alert('A user with this email already exists.'); //TODO: Use a more sophisticated feedback mechanism
             return;
         }
 
-        // If the user does not exist, proceed with creation
         await createUser({ username, email, pass });
     };
 
