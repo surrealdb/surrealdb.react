@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import CreateComponent from './components/CreateComponent';
 import DeleteComponent from './components/DeleteComponent';
 import InfoComponent from './components/InfoComponent';
@@ -7,8 +9,6 @@ import QueryComponent from './components/QueryComponent';
 import SigninComponent from './components/SigninComponent';
 import SignupComponent from './components/SignupComponent';
 import UpdateComponent from './components/UpdateComponent';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './styles.css';
 
 const components = [
@@ -42,7 +42,7 @@ export default function App() {
 
     const handleSelectChange = (e) => {
         setActiveComponentIndex(Number(e.target.value));
-        setShowParagraph(false); 
+        setShowParagraph(false);
     };
 
     const ActiveComponent = components[activeComponentIndex].component;
@@ -68,10 +68,10 @@ export default function App() {
 
             {showParagraph && (
                 <div className="code-container">
-                <h3>Run the following commands in your terminal</h3>
-                <SyntaxHighlighter language="bash" style={materialLight}>
-                    {codeString}
-                </SyntaxHighlighter>
+                    <h3>Run the following commands in your terminal</h3>
+                    <SyntaxHighlighter language="bash" style={materialLight}>
+                        {codeString}
+                    </SyntaxHighlighter>
                 </div>
             )}
 
