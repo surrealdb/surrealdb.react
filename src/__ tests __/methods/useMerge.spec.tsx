@@ -1,4 +1,4 @@
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/useFetcherFactory';
 import { useAbstractMutation } from '@/methods/useAbstract';
 import { useMerge } from '@/methods/useMerge';
 import { act, renderHook } from '@testing-library/react';

@@ -1,6 +1,6 @@
 import { MemoryCache } from '@/cache';
 import { SurrealClient } from '@/client';
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/useFetcherFactory';
 import { useAbstractQuery } from '@/methods/useAbstract';
 import { useSelect } from '@/methods/useSelect';
 import { SurrealContext } from '@/provider';

@@ -1,0 +1,17 @@
+.app-container {
+    text-align: center;
+}
+
+.code-container {
+    margin: 20px auto;
+    max-width: 65%;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.navigation {
+    margin: 20px 0;
+}
+
+.component-viewer {
+    margin-top: 20px;
+}

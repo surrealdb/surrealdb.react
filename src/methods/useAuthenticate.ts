@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/useFetcherFactory';
 import {
     AbstractMutationParameters,
     useAbstractMutation,
