@@ -1,12 +1,12 @@
 import { SurrealClient } from '@/client';
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
 import { useAbstractMutation } from '@/methods/useAbstract';
 import { useAuthUpdated } from '@/methods/useAuthUpdated';
 import { useAuthenticate } from '@/methods/useAuthenticate';
 
 jest.mock('@/library/fetcherFactory', () => ({
-    fetcherFactory: jest.fn((...args: Parameters<typeof fetcherFactory>) =>
-        fetcherFactory(...args)
+    fetcherFactory: jest.fn((...args: Parameters<typeof useFetcherFactory>) =>
+        useFetcherFactory(...args)
     ),
 }));
 jest.mock('@/methods/useAuthUpdated', () => ({
@@ -28,7 +28,7 @@ describe('useAuthenticate', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         (useAuthUpdated as jest.Mock).mockReturnValue(mockAuthUpdated);
-        (fetcherFactory as jest.Mock).mockImplementation(
+        (useFetcherFactory as jest.Mock).mockImplementation(
             () =>
                 ({ surreal }: SurrealClient, token: string) =>
                     surreal.authenticate(token).finally(mockAuthUpdated)
@@ -45,7 +45,7 @@ describe('useAuthenticate', () => {
         };
 
         useAuthenticate();
-        const fetcherCall = (fetcherFactory as jest.Mock).mock.calls[0];
+        const fetcherCall = (useFetcherFactory as jest.Mock).mock.calls[0];
         const fetcherFunction = fetcherCall[2];
         const result = await fetcherFunction({ surreal: mockSurreal }, token);
 
@@ -63,7 +63,7 @@ describe('useAuthenticate', () => {
         };
 
         useAuthenticate();
-        const fetcherCall = (fetcherFactory as jest.Mock).mock.calls[0];
+        const fetcherCall = (useFetcherFactory as jest.Mock).mock.calls[0];
         const fetcherFunction = fetcherCall[2];
 
         await expect(

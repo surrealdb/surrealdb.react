@@ -1,6 +1,6 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
 import { useKey } from '@/library/key';
 import {
     AbstractQueryParameters,
@@ -11,7 +11,7 @@ export function useInfo<Data extends Record<string, unknown>, Error = unknown>(
     abstractArguments: AbstractQueryParameters = {}
 ) {
     const key = useKey(['__auth', 'info']);
-    const fetcher = fetcherFactory<[], Data | undefined, Error>(
+    const fetcher = useFetcherFactory<[], Data | undefined, Error>(
         'query',
         key,
         ({ surreal }) => surreal.info<Data>()

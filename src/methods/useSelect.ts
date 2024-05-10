@@ -1,6 +1,6 @@
 'use client';
 
-import { fetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/fetcherFactory';
 import { useKey } from '@/library/key';
 import {
     AbstractQueryParameters,
@@ -19,7 +19,7 @@ export function useSelect<
     resource: string;
 }) {
     const key = useKey(queryKey);
-    const fetcher = fetcherFactory<[], Data[], Error>(
+    const fetcher = useFetcherFactory<[], Data[], Error>(
         'query',
         key,
         ({ surreal }) => surreal.select<Data>(resource)
