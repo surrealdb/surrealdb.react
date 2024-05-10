@@ -1,5 +1,5 @@
 import { SurrealClient } from '@/client';
-import { useFetcherFactory } from '@/library/fetcherFactory';
+import { useFetcherFactory } from '@/library/useFetcherFactory';
 import { useAbstractMutation } from '@/methods/useAbstract';
 import { useAuthUpdated } from '@/methods/useAuthUpdated';
 import { useAuthenticate } from '@/methods/useAuthenticate';
